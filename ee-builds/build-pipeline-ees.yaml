@@ -1,0 +1,31 @@
+---
+- name: Build EEs for Trusted Code Pipelines
+  hosts: all
+  connection: local
+  collections:
+    - infra.ee_utilities
+  vars:
+
+    ee_builder_dir_clean: false
+    ee_builder_dir: "/tmp/"
+    ee_base_registry_username: rh-ee-dwaters
+    ee_base_registry_password: "{{ registrypwd }}"
+    ee_base_image: registry.redhat.io/ansible-automation-platform-24/ee-minimal-rhel9:latest
+    ee_registry_dest: "quay.io/rh-ee-dwaters"
+    ee_registry_username: rh-ee-dwaters
+    ee_registry_password: "{{ registrypwd }}"
+    ee_pull_collections_from_hub: false
+    ee_verbosity: 3
+
+    ee_list:
+      - name: trusted-lint-ee
+        images:
+          base_image: 
+            name: registry.redhat.io/ansible-automation-platform-25/ee-supported-rhel9:latest
+        alt_name: EE for Trusted Code Pipelines - ansible-lint
+        tag: 1.0
+        dependencies:
+          python:
+            - ansible-lint
+
+
