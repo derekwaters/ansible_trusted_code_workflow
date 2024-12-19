@@ -1,5 +1,5 @@
 # Make sure you podman login to the Red Hat registry, then:
-# ansible-builder build -t trusted-lint-ee:latest
+# ansible-builder build -t trusted-tox-ee:latest
 # To host locally:
 # * run the docker registry:
 #     podman run -d -p 5000:5000 --name registry registry:latest
@@ -11,9 +11,9 @@
 #       insecure = true
 #
 # * Tag the built image:
-#     podman image tag localhost/trusted-lint-ee localhost:5000/trusted-lint-ee
+#     podman image tag localhost/trusted-tox-ee localhost:5000/trusted-tox-ee
 # * Push the image:
-#     podman push localhost:5000/trusted-lint-ee
+#     podman push localhost:5000/trusted-tox-ee
 # * Verify the image is there:
 #     curl -X GET http://localhost:5000/v2/_catalog
 
@@ -34,7 +34,7 @@ dependencies:
       # python_path: /usr/bin/python3.11
 
   python:
-    - ansible-lint
+    - tox-ansible
     
 options:
   package_manager_path: /usr/bin/microdnf

@@ -1,0 +1,22 @@
+# With ansible-navigator and the correct ee built (eg. ee-lint):
+# > ansible-navigator run ansible-lint.yaml --eei localhost/ee-lint --pp never --mode stdout -e remote_repo="<<git repo>>" -i inventory
+---
+- name: lint a git repository
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Retrieve the git repo
+      ansible.builtin.git:
+        repo: "{{ remote_repo }}"
+        dest: /tmp/repoclone
+
+    - name: Lint the repo
+      ansible.builtin.command:
+        cmd: ansible-lint -f json /tmp/repoclone
+      register: __lint_output
+      ignore_errors: true
+
+    - name: output it
+      ansible.builtin.debug:
+        var: __lint_output
