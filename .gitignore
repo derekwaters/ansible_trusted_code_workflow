@@ -1,3 +1,8 @@
+# Project specific
+inventory
+*-artifact-*.json
+context/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
