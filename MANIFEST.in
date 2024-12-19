@@ -1,0 +1,2 @@
+recursive-include ee-builds *.yaml
+recursive-include playbooks *.yaml

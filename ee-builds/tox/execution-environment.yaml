@@ -36,5 +36,13 @@ dependencies:
   python:
     - tox-ansible
     
+additional_build_files:
+  - src: files/tox-ansible.ini
+    dest: configs
+
+additional_build_steps:
+  prepend_base:
+    - COPY _build/configs/tox-ansible.ini /tmp/tox-ansible.ini
+
 options:
   package_manager_path: /usr/bin/microdnf

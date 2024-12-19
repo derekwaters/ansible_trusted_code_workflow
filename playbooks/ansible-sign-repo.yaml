@@ -1,0 +1,23 @@
+# With ansible-navigator and the correct ee built (eg. ee-sign):
+# > ansible-navigator run ansible-sign-repo.yaml --eei localhost/ee-sign --pp never --mode stdout -e remote_repo="<<git repo>>" -i inventory
+---
+- name: Sign a git repo with ansible-sign
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Retrieve the git repo
+      ansible.builtin.git:
+        repo: "{{ remote_repo }}"
+        dest: /tmp/repoclone
+
+    - name: Sign the code
+      ansible.builtin.command:
+        cmd: ansible-sign project gpg-verify .
+        chdir: /tmp/repoclone
+      register: __sign_output
+      ignore_errors: true
+
+    - name: output it
+      ansible.builtin.debug:
+        var: __sign_output

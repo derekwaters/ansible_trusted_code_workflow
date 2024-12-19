@@ -1,0 +1,31 @@
+# With ansible-navigator and the correct ee built (eg. ee-tox):
+# > ansible-navigator run ansible-tox.yaml --eei localhost/ee-tox --pp never --mode stdout -e remote_repo="<<git repo>>" -i inventory
+---
+- name: tox sanity check a git repository
+  hosts: localhost
+  gather_facts: false
+
+  tasks:
+    - name: Retrieve the git repo
+      ansible.builtin.git:
+        repo: "{{ remote_repo }}"
+        dest: /tmp/repoclone
+
+    # NOTE: The default tox-ansible.ini file is included in the EE image as /tmp/tox-ansible.ini
+    - name: Install the tox-ansible config file
+      ansible.builtin.copy:
+        remote_src: true
+        src: /tmp/tox-ansible.ini
+        dest: /tmp/repoclone/tox-ansible.ini
+        mode: '0644'
+
+    - name: Sanity check the repo
+      ansible.builtin.command:
+        cmd: tox --ansible -c tox-ansible.ini
+        chdir: /tmp/repoclone
+      register: __tox_output
+      ignore_errors: true
+
+    - name: output it
+      ansible.builtin.debug:
+        var: __tox_output
